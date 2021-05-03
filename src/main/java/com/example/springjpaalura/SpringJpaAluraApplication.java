@@ -3,10 +3,7 @@ package com.example.springjpaalura;
 import com.example.springjpaalura.orm.Cargo;
 import com.example.springjpaalura.orm.UnidadeTrabalho;
 import com.example.springjpaalura.repository.CargoRepository;
-import com.example.springjpaalura.service.CargoService;
-import com.example.springjpaalura.service.FuncionaroService;
-import com.example.springjpaalura.service.RelatoriosService;
-import com.example.springjpaalura.service.UnidadeTrabalhoService;
+import com.example.springjpaalura.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -27,6 +24,8 @@ public class SpringJpaAluraApplication implements CommandLineRunner {
     private UnidadeTrabalhoService unidadeTrabalhoService;
     @Autowired
     private RelatoriosService relatoriosService;
+    @Autowired
+    private RelatorioFuncionarioDinamico relatorioDinamico;
 
     public static void main(String[] args) {
         SpringApplication.run(SpringJpaAluraApplication.class, args);
@@ -43,6 +42,7 @@ public class SpringJpaAluraApplication implements CommandLineRunner {
             System.out.println("2 - unidade trabalho ");
             System.out.println("3 - funcionario ");
             System.out.println("4 - Relatorios");
+            System.out.println("5 - Relatorio Funcionario Dinamico");
 
             int action = scanner.nextInt();
 
@@ -58,6 +58,9 @@ public class SpringJpaAluraApplication implements CommandLineRunner {
                     break;
                 case 4:
                     relatoriosService.inicio(scanner);
+                    break;
+                case 5:
+                    relatorioDinamico.inicial(scanner);
                     break;
                 default:
                     system = false;

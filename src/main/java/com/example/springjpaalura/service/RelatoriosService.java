@@ -1,7 +1,9 @@
 package com.example.springjpaalura.service;
 
 import com.example.springjpaalura.orm.Funcionario;
-import com.example.springjpaalura.repository.FuncionaroRepository;
+import com.example.springjpaalura.orm.FuncionarioProjecao;
+import com.example.springjpaalura.repository.FuncionarioRepository;
+import com.example.springjpaalura.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,8 @@ import java.util.Scanner;
 public class RelatoriosService {
 
     private boolean system = true;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    @Autowired FuncionaroRepository funcionaroRepository;
+    @Autowired FuncionarioRepository funcionaroRepository;
 
     public void inicio(Scanner scanner) {
         while (system) {
@@ -25,6 +26,7 @@ public class RelatoriosService {
             System.out.println("1 - Busca funcionario nome");
             System.out.println("2 - Busca funcionario por nome, salario maior que, data de contratacao");
             System.out.println("3 - Busca funcionario data de contratacao");
+            System.out.println("4 - Pesquisa os funcionarios e salario");
 
 
 
@@ -41,6 +43,8 @@ public class RelatoriosService {
                 case 3:
                     buscaFuncionarioDataContratacaoMaior(scanner);
                     break;
+                case 4:
+                    pesquisaFuncionarioSalario();
                 default:
                     system = false;
                     break;
@@ -66,7 +70,7 @@ public class RelatoriosService {
         System.out.println("Digite a data");
         String data = scanner.next();
 
-        LocalDate localDate = LocalDate.parse(data, formatter);
+        LocalDate localDate = LocalDate.parse(data, DateUtils.createFormatter());
 
         List<Funcionario> funcionarios = funcionaroRepository.findNomeSalarioMaiorDataContratacao(nome, salario, localDate);
         funcionarios.forEach(System.out::println);
@@ -76,13 +80,19 @@ public class RelatoriosService {
 
         System.out.println("Digite a data de contratacao");
         String dataContratacao = scanner.next();
-        LocalDate localDate = LocalDate.parse(dataContratacao, formatter);
+        LocalDate localDate = LocalDate.parse(dataContratacao, DateUtils.createFormatter());
 
         List<Funcionario> funcionarios = funcionaroRepository.findDataContratacaoMaior(localDate);
 
         funcionarios.forEach(System.out::println);
+    }
 
-
+    private void pesquisaFuncionarioSalario() {
+        List<FuncionarioProjecao> funcionarioProjecaos = funcionaroRepository.findFuncionarioSalario();
+        funcionarioProjecaos.forEach(f -> {
+            System.out.println("Funcionario: id: " + f.getId()
+            + " nome: " + f.getNome() + " salario: " + f.getSalario());
+        });
     }
 
 }

@@ -4,8 +4,9 @@ import com.example.springjpaalura.orm.Cargo;
 import com.example.springjpaalura.orm.Funcionario;
 import com.example.springjpaalura.orm.UnidadeTrabalho;
 import com.example.springjpaalura.repository.CargoRepository;
-import com.example.springjpaalura.repository.FuncionaroRepository;
+import com.example.springjpaalura.repository.FuncionarioRepository;
 import com.example.springjpaalura.repository.UnidadeTrabalhoRepository;
+import com.example.springjpaalura.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,9 +25,8 @@ import java.util.Scanner;
 public class FuncionaroService {
 
     private boolean system = true;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    @Autowired FuncionaroRepository funcionaroRepository;
+    @Autowired FuncionarioRepository funcionaroRepository;
     @Autowired CargoRepository cargoRepository;
     @Autowired UnidadeTrabalhoRepository unidadeTrabalhoRepository;
 
@@ -86,7 +86,7 @@ public class FuncionaroService {
         funcionario.setNome(nome);
         funcionario.setCpf(cpf);
         funcionario.setSalario(salario);
-        funcionario.setDataContratacao(LocalDate.parse(dataContratacao, formatter));
+        funcionario.setDataContratacao(LocalDate.parse(dataContratacao, DateUtils.createFormatter()));
         funcionario.setCargo(cargo.get());
         funcionario.setUnidadeTrabalhos(unidades);
 
@@ -142,7 +142,7 @@ public class FuncionaroService {
         funcionario.setNome(nome);
         funcionario.setCpf(cpf);
         funcionario.setSalario(salario);
-        funcionario.setDataContratacao(LocalDate.parse(dataContratacao, formatter));
+        funcionario.setDataContratacao(LocalDate.parse(dataContratacao, DateUtils.createFormatter()));
         funcionario.setCargo(cargo.get());
         funcionario.setUnidadeTrabalhos(unidades);
         funcionaroRepository.save(funcionario);
@@ -153,7 +153,7 @@ public class FuncionaroService {
         System.out.println("Qual pagina deseja vizualizar?");
         Integer page = scanner.nextInt();
 
-        Pageable pageable = PageRequest.of(page, 5, Sort.unsorted());
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.ASC, "nome"));
 
         Page<Funcionario> funcionarios = funcionaroRepository.findAll(pageable);
 
